@@ -1,0 +1,15 @@
+<div class="container my-4">
+    <form>
+        
+        <div class="mb-3" *ngFor="let field of fields, let i=index" >
+            <label for="exampleInputEmail1" class="form-label">{{field.label}}</label>
+            <input type="text" class="form-control">
+        </div>
+        
+        <div>
+            <button type="button" class="btn btn-primary">Submit</button>
+            <button type="button" class="btn btn-primary  ms-2" (click)="generatePpt()">Generate PPT</button>
+            <input type="file" class="file-upload ms-2" (change)="upload($event)">
+        </div>
+    </form>
+</div>
