@@ -3,7 +3,7 @@
         
         <div class="mb-3" *ngFor="let field of fields, let i=index" >
             <label for="exampleInputEmail1" class="form-label">{{field.label}}</label>
-            <input type="text" class="form-control">
+            <input type="text" class="form-control" [(ngModel)]="field.model" name="field.name">
         </div>
         
         <div>

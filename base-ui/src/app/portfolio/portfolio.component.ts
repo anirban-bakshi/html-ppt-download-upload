@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import PptxGenJS from 'pptxgenjs';
+import { PortfolioService } from './portfolio.service';
 
 @Component({
   selector: 'app-portfolio',
@@ -8,7 +9,9 @@ import PptxGenJS from 'pptxgenjs';
 })
 export class PortfolioComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private service:PortfolioService
+  ) { }
 
   ngOnInit(): void {
   }
@@ -17,8 +20,8 @@ export class PortfolioComponent implements OnInit {
   email = '';
 
   fields =[
-    {label:"Name", model: this.name},
-    {label:"Email Address", model: this.email}
+    {label:"Name", model: "", name:"name"},
+    {label:"Email Address", model: "", name:"email"}
   ]
 
   generatePpt(): void {
@@ -48,18 +51,24 @@ export class PortfolioComponent implements OnInit {
     upload(event: any){
       console.log("I am inside upload");
       console.log(event);
-      this.readFileContent(event.target.files[0]).then(content => {
-       console.log(content);
-      }).catch(error => console.log(error));
+      let file = event.target.files[0];
+
+      if(file) {
+        this.service.upload(file).subscribe(
+          response =>{
+            console.log(response);
+            if(response.body) {
+              this.fields.forEach(field=>{
+                field.model = response.body[field.label].replaceAll("_","");
+              })
+            }
+          }, error=>{
+            console.log(error);
+          }
+        );
+      } 
     }
 
-    readFileContent(file: any) {
-      const reader = new FileReader()
-      return new Promise((resolve, reject) => {
-        reader.onload = event => resolve(event.target)
-        reader.onerror = error => reject(error)
-        reader.readAsText(file)
-      })
-    }
+    
 
 }
